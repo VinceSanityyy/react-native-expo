@@ -1,11 +1,25 @@
 import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React,{ useState, useEffect, AsyncStorage } from 'react';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
 import { MonoText } from '../components/StyledText';
-
+import {Button} from 'react-native-elements'
+import Logout from '../methods/logout'
 export default function HomeScreen() {
+  const [loading, setLoading] = useState(false)
+  function handleClick(){
+    Logout(setLoading)
+  }
+  useEffect(() => {
+    // console.log(AsyncStorage.getItem('bearer_token'))
+  })
+  if(loading == true){
+    return(
+      <View style={styles.container}>
+          <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -19,7 +33,9 @@ export default function HomeScreen() {
             style={styles.welcomeImage}
           />
         </View>
-
+        <TouchableOpacity>
+              <Button onPress = {handleClick} title='logout'/>
+        </TouchableOpacity>
         <View style={styles.getStartedContainer}>
           <DevelopmentModeNotice />
 
@@ -40,14 +56,6 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
-        </View>
-      </View>
     </View>
   );
 }
